@@ -3,6 +3,7 @@ package com.example.hava.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,40 +21,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-data class WeatherMusicSuggestion(
+data class WeatherSong(
     val title: String,
-    val subtitle: String
+    val artist: String
 )
 
-/** Returns a listening mood; the user-curated songs can be attached to these moods later. */
-fun musicSuggestionForWeather(weatherCode: Int, isDay: Boolean): WeatherMusicSuggestion = when {
+/** Returns one named song suggestion based on the current weather and time of day. */
+fun musicSuggestionForWeather(weatherCode: Int, isDay: Boolean): WeatherSong = when {
     weatherCode in 51..67 || weatherCode in 80..82 || weatherCode in 95..99 ->
-        WeatherMusicSuggestion("Yağmur eşlikçisi", "Sakin, yumuşak parçalar")
+        WeatherSong("Yağmur Yağar", "Mutlak Sıfır")
 
     weatherCode in 71..77 || weatherCode == 85 || weatherCode == 86 ->
-        WeatherMusicSuggestion("Kar manzarası", "Dingin parçalarla sıcacık bir mola")
+        WeatherSong("Snowman", "Sia")
 
     weatherCode == 0 || weatherCode == 1 -> if (isDay) {
-        WeatherMusicSuggestion("Güneşli yürüyüş", "Enerjik parçalar için güzel bir gün")
+        WeatherSong("Walking on Sunshine", "Katrina & The Waves")
     } else {
-        WeatherMusicSuggestion("Yıldızlı gece", "Geceye yakışan sakin parçalar")
+        WeatherSong("A Sky Full of Stars", "Coldplay")
     }
 
     weatherCode == 2 -> if (isDay) {
-        WeatherMusicSuggestion("Hafif enerjik", "Parçalı bulutlara uygun bir yürüyüş")
+        WeatherSong("Mr. Blue Sky", "Electric Light Orchestra")
     } else {
-        WeatherMusicSuggestion("Bulutlu gece", "Rahatlatıcı, hafif ritimli parçalar")
+        WeatherSong("A Sky Full of Stars", "Coldplay")
     }
 
     weatherCode == 3 || weatherCode == 45 || weatherCode == 48 ->
-        WeatherMusicSuggestion("Bulutlu hava modu", "Yumuşak ve keyifli parçalar")
+        WeatherSong("Clouds", "IYAMAH")
 
-    else -> WeatherMusicSuggestion("Bugünün ritmi", "Havaya uygun bir müzik molası")
+    else -> WeatherSong("Mr. Blue Sky", "Electric Light Orchestra")
 }
 
 @Composable
 fun WeatherMusicCard(
-    suggestion: WeatherMusicSuggestion,
+    song: WeatherSong,
     isNight: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -85,25 +86,25 @@ fun WeatherMusicCard(
                 )
             }
 
-            androidx.compose.foundation.layout.Column(
+            Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    text = "HAVANIN RİTMİ",
+                    text = "BUGÜNÜN ŞARKI ÖNERİSİ",
                     color = textColor.copy(alpha = 0.68f),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.6.sp
+                    letterSpacing = 0.5.sp
                 )
                 Text(
-                    text = suggestion.title,
+                    text = song.title,
                     color = textColor,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = suggestion.subtitle,
+                    text = song.artist,
                     color = textColor.copy(alpha = 0.78f),
                     style = MaterialTheme.typography.bodySmall
                 )

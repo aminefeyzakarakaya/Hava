@@ -1,6 +1,7 @@
 package com.example.hava.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,20 +10,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Text
+import com.example.hava.R
 
 @Composable
 fun HavaSplashScreen() {
@@ -36,13 +38,21 @@ fun HavaSplashScreen() {
             )
     ) {
         Canvas(Modifier.fillMaxSize()) {
-            // Light, rounded clouds keep the welcome screen airy without crowding the mascot.
-            drawCircle(Color.White.copy(alpha = .32f), size.width * .21f,
-                Offset(size.width * .03f, size.height * .18f))
-            drawCircle(Color.White.copy(alpha = .24f), size.width * .15f,
-                Offset(size.width * .98f, size.height * .31f))
-            drawCircle(Color(0xFFFFD56F).copy(alpha = .75f), size.width * .085f,
-                Offset(size.width * .83f, size.height * .18f))
+            drawCircle(
+                color = Color.White.copy(alpha = .30f),
+                radius = size.width * .20f,
+                center = Offset(size.width * .02f, size.height * .16f)
+            )
+            drawCircle(
+                color = Color.White.copy(alpha = .22f),
+                radius = size.width * .15f,
+                center = Offset(size.width * .98f, size.height * .30f)
+            )
+            drawCircle(
+                color = Color(0xFFFFD56F).copy(alpha = .76f),
+                radius = size.width * .08f,
+                center = Offset(size.width * .84f, size.height * .18f)
+            )
         }
 
         Column(
@@ -53,38 +63,15 @@ fun HavaSplashScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                modifier = Modifier.size(width = 230.dp, height = 205.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                TeknoCanCocuk(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(width = 146.dp, height = 128.dp)
-                )
-                Canvas(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .height(94.dp)
-                ) {
-                    val cloud = Color(0xFFF8FCFF)
-                    drawRoundRect(
-                        color = cloud,
-                        topLeft = Offset(size.width * .08f, size.height * .47f),
-                        size = Size(size.width * .84f, size.height * .58f),
-                        cornerRadius = CornerRadius(size.height * .28f)
-                    )
-                    drawCircle(cloud, size.height * .34f,
-                        Offset(size.width * .33f, size.height * .52f))
-                    drawCircle(cloud, size.height * .40f,
-                        Offset(size.width * .59f, size.height * .45f))
-                    drawCircle(cloud, size.height * .30f,
-                        Offset(size.width * .78f, size.height * .55f))
-                }
-            }
-
-            Spacer(Modifier.height(10.dp))
+            Image(
+                painter = painterResource(id = R.drawable.teknocan_cloud),
+                contentDescription = "Buluttan bakan TeknoCan",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 250.dp)
+            )
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = "Hava",
                 color = Color(0xFF15385D),

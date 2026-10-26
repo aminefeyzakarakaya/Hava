@@ -141,7 +141,7 @@ fun SehirListesi(modifier: Modifier = Modifier) {
 
             item(key = "weather_music") {
                 WeatherMusicCard(
-                    suggestion = musicSuggestionForWeather(
+                    song = musicSuggestionForWeather(
                         weatherCode = hava.weatherCode,
                         isDay = hava.isDay == 1
                     ),

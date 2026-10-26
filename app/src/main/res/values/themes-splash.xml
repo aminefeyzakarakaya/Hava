@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.Hava.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#FF9DD9FC</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_teknocan_splash</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/teknocan_cloud</item>
         <item name="postSplashScreenTheme">@style/Theme.Hava</item>
     </style>
 </resources>
