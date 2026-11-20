@@ -1,7 +1,8 @@
-package com.example.hava.data
+package com.example.hava.data.location
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
@@ -15,31 +16,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 
-class DeviceLocationClient(context: Context) {
+class DeviceLocationClient(context: Context) : LocationClient {
 
     private val appContext = context.applicationContext
     private val fusedLocationClient =
         LocationServices.getFusedLocationProviderClient(appContext)
 
     @SuppressLint("MissingPermission")
-    suspend fun getCurrentLocation(): Location? = suspendCancellableCoroutine { continuation ->
-        val cancellationTokenSource = CancellationTokenSource()
-        continuation.invokeOnCancellation { cancellationTokenSource.cancel() }
+    override suspend fun getCurrentLocation(): Location? =
+        suspendCancellableCoroutine { continuation ->
+            val cancellationTokenSource = CancellationTokenSource()
+            continuation.invokeOnCancellation { cancellationTokenSource.cancel() }
 
-        fusedLocationClient
-            .getCurrentLocation(
-                Priority.PRIORITY_BALANCED_POWER_ACCURACY,
-                cancellationTokenSource.token
-            )
-            .addOnSuccessListener { location ->
-                if (continuation.isActive) continuation.resume(location)
-            }
-            .addOnFailureListener { error ->
-                if (continuation.isActive) continuation.resumeWithException(error)
-            }
-    }
+            fusedLocationClient
+                .getCurrentLocation(
+                    Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+                    cancellationTokenSource.token
+                )
+                .addOnSuccessListener { location ->
+                    if (continuation.isActive) continuation.resume(location)
+                }
+                .addOnFailureListener { error ->
+                    if (continuation.isActive) continuation.resumeWithException(error)
+                }
+        }
 
-    suspend fun getCityName(latitude: Double, longitude: Double): String? {
+    override suspend fun getCityName(latitude: Double, longitude: Double): String? {
         if (!Geocoder.isPresent()) return null
 
         val geocoder = Geocoder(appContext, Locale("tr", "TR"))
@@ -51,7 +53,7 @@ class DeviceLocationClient(context: Context) {
                     longitude,
                     1,
                     object : Geocoder.GeocodeListener {
-                        override fun onGeocode(addresses: MutableList<android.location.Address>) {
+                        override fun onGeocode(addresses: MutableList<Address>) {
                             val cityName = addresses.firstOrNull()?.toCityName()
                             if (continuation.isActive) continuation.resume(cityName)
                         }
@@ -72,7 +74,7 @@ class DeviceLocationClient(context: Context) {
         }
     }
 
-    private fun android.location.Address.toCityName(): String? =
+    private fun Address.toCityName(): String? =
         adminArea?.takeIf { it.isNotBlank() }
             ?: locality?.takeIf { it.isNotBlank() }
             ?: subAdminArea?.takeIf { it.isNotBlank() }

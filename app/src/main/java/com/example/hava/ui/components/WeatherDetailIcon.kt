@@ -1,4 +1,4 @@
-package com.example.hava.ui
+package com.example.hava.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -18,24 +18,39 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import kotlin.math.cos
+import kotlin.math.sin
+import com.example.hava.ui.theme.DetailBadgeColors
+
+/** Detay kartlarının türü. İkon artık Türkçe başlığa göre değil bu türe göre seçiliyor. */
+enum class DetailType { HUMIDITY, WIND, FEELS_LIKE, CONDITIONS }
 
 @Composable
-fun WeatherDetailIcon(label: String, night: Boolean, modifier: Modifier = Modifier) {
-    val badge = when (label) {
-        "Nem" -> Color(0xFFA9D5FF)
-        "Rüzgâr" -> Color(0xFFA9DFED)
-        "Hissedilen" -> Color(0xFFFFCDAA)
-        else -> Color(0xFFFFDC80)
+fun WeatherDetailIcon(
+    type: DetailType,
+    description: String,
+    night: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val badge = when (type) {
+        DetailType.HUMIDITY -> DetailBadgeColors.Humidity
+        DetailType.WIND -> DetailBadgeColors.Wind
+        DetailType.FEELS_LIKE -> DetailBadgeColors.FeelsLike
+        DetailType.CONDITIONS -> DetailBadgeColors.Conditions
     }
-    Box(modifier.size(40.dp).background(badge, CircleShape)
-        .semantics { contentDescription = label }) {
+    Box(
+        modifier
+            .size(40.dp)
+            .background(badge, CircleShape)
+            .semantics { contentDescription = description }
+    ) {
         Canvas(Modifier.size(40.dp).padding(9.dp)) {
             val w = size.width
             val h = size.height
-            val ink = Color(0xFF194773)
+            val ink = DetailBadgeColors.Ink
             val pen = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
-            when (label) {
-                "Nem" -> {
+            when (type) {
+                DetailType.HUMIDITY -> {
                     val drop = Path().apply {
                         moveTo(w * .5f, h * .03f)
                         cubicTo(w * .42f, h * .2f, w * .12f, h * .48f, w * .15f, h * .7f)
@@ -45,7 +60,8 @@ fun WeatherDetailIcon(label: String, night: Boolean, modifier: Modifier = Modifi
                     }
                     drawPath(drop, ink)
                 }
-                "Rüzgâr" -> {
+
+                DetailType.WIND -> {
                     val wind = Path().apply {
                         moveTo(0f, h * .30f)
                         lineTo(w * .65f, h * .30f)
@@ -58,7 +74,8 @@ fun WeatherDetailIcon(label: String, night: Boolean, modifier: Modifier = Modifi
                     }
                     drawPath(wind, ink, style = pen)
                 }
-                "Hissedilen" -> {
+
+                DetailType.FEELS_LIKE -> {
                     val tube = Path().apply {
                         moveTo(w * .35f, h * .64f)
                         lineTo(w * .35f, h * .18f)
@@ -67,20 +84,31 @@ fun WeatherDetailIcon(label: String, night: Boolean, modifier: Modifier = Modifi
                     }
                     drawPath(tube, ink, style = pen)
                     drawCircle(ink, w * .22f, Offset(w * .5f, h * .75f), style = pen)
-                    drawLine(ink, Offset(w * .5f, h * .3f), Offset(w * .5f, h * .76f), 2.dp.toPx(), StrokeCap.Round)
+                    drawLine(
+                        ink, Offset(w * .5f, h * .3f), Offset(w * .5f, h * .76f),
+                        2.dp.toPx(), StrokeCap.Round
+                    )
                 }
-                else -> if (night) {
+
+                DetailType.CONDITIONS -> if (night) {
                     val outer = Path().apply { addOval(Rect(0f, 0f, w, h)) }
-                    val inner = Path().apply { addOval(Rect(w * .3f, -h * .15f, w * 1.12f, h * .72f)) }
+                    val inner = Path().apply {
+                        addOval(Rect(w * .3f, -h * .15f, w * 1.12f, h * .72f))
+                    }
                     drawPath(Path.combine(PathOperation.Difference, outer, inner), ink)
                 } else {
                     drawCircle(ink, w * .25f, center)
                     repeat(8) { i ->
                         val angle = i * Math.PI / 4
-                        val dx = kotlin.math.cos(angle).toFloat()
-                        val dy = kotlin.math.sin(angle).toFloat()
-                        drawLine(ink, center + Offset(dx * w * .36f, dy * h * .36f),
-                            center + Offset(dx * w * .47f, dy * h * .47f), 1.5.dp.toPx(), StrokeCap.Round)
+                        val dx = cos(angle).toFloat()
+                        val dy = sin(angle).toFloat()
+                        drawLine(
+                            ink,
+                            center + Offset(dx * w * .36f, dy * h * .36f),
+                            center + Offset(dx * w * .47f, dy * h * .47f),
+                            1.5.dp.toPx(),
+                            StrokeCap.Round
+                        )
                     }
                 }
             }

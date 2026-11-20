@@ -1,4 +1,4 @@
-package com.example.hava.data
+package com.example.hava.data.remote
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.Retrofit

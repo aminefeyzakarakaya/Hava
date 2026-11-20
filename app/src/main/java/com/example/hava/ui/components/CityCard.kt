@@ -1,4 +1,4 @@
-package com.example.hava.ui
+package com.example.hava.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -16,6 +16,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hava.ui.theme.HavaTheme
+import com.example.hava.ui.theme.CityCardColors
+import com.example.hava.ui.theme.HavaBlue
+import com.example.hava.ui.theme.HavaNavy
+import com.example.hava.ui.theme.HavaNightCard
+import com.example.hava.ui.theme.HavaSky
+import com.example.hava.ui.theme.HavaSurfaceLight
+import com.example.hava.ui.theme.HavaTextLight
+import androidx.compose.ui.res.stringResource
+import com.example.hava.R
 
 @Composable
 fun CityCard(
@@ -31,12 +40,12 @@ fun CityCard(
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
             containerColor = when {
-                isNight && isSelected -> Color(0xFF2A527C)
-                isNight -> Color(0xFF193655)
-                isSelected -> Color(0xFFD8EEFF)
-                else -> Color(0xFFFFFEFC)
+                isNight && isSelected -> CityCardColors.SelectedNight
+                isNight -> HavaNightCard
+                isSelected -> HavaSky
+                else -> HavaSurfaceLight
             },
-            contentColor = if (isNight) Color(0xFFF8FAFF) else Color(0xFF1D3658)
+            contentColor = if (isNight) HavaTextLight else HavaNavy
         )
     ) {
         Row(
@@ -52,8 +61,8 @@ fun CityCard(
             )
             if (isSelected) {
                 Text(
-                    text = "Seçili",
-                    color = if (isNight) Color(0xFFFFD46F) else Color(0xFF438DE0),
+                    text = stringResource(R.string.city_selected),
+                    color = if (isNight) CityCardColors.SelectedLabelNight else HavaBlue,
                     style = MaterialTheme.typography.labelLarge
                 )
             }

@@ -1,4 +1,4 @@
-package com.example.hava.ui
+package com.example.hava.ui.components
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -16,41 +16,43 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.hava.data.CurrentWeather
+import com.example.hava.data.remote.CurrentWeather
+import com.example.hava.domain.WeatherCondition
+import com.example.hava.ui.theme.NightStarWarm
+import com.example.hava.ui.theme.WeatherGradients
 
 @Composable
 fun WeatherBackground(
-    hava: CurrentWeather?,
+    weather: CurrentWeather?,
     content: @Composable () -> Unit
 ) {
-    val gece = hava?.isDay == 0
-    val kod = hava?.weatherCode ?: -1
-    val colors = when {
-        hava == null -> listOf(Color(0xFFB7DEFA), Color(0xFFE7E8FF))
-        gece && (kod in 71..77 || kod == 85 || kod == 86) ->
-            listOf(Color(0xFF132A49), Color(0xFF243C5C))
-        gece && (kod in 51..67 || kod in 80..82 || kod in 95..99) ->
-            listOf(Color(0xFF0B203B), Color(0xFF1B3657))
-        gece && (kod in 2..3 || kod in 45..48) ->
-            listOf(Color(0xFF0D2341), Color(0xFF233755))
-        gece -> listOf(Color(0xFF081A35), Color(0xFF172E50))
-        kod in 71..77 || kod == 85 || kod == 86 ->
-            listOf(Color(0xFFB9DDF4), Color(0xFFEAF6FF))
-        kod in 51..67 || kod in 80..82 || kod in 95..99 ->
-            listOf(Color(0xFF8DBEDB), Color(0xFFD5E7F2))
-        kod == 3 || kod in 45..48 ->
-            listOf(Color(0xFFB7CDE2), Color(0xFFE4EAF4))
-        kod == 2 -> listOf(Color(0xFF80BCEC), Color(0xFFD9E6FA))
-        else -> listOf(Color(0xFF76BDF1), Color(0xFFFFE6AD))
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(colors))
+            .background(Brush.verticalGradient(backgroundColors(weather)))
     ) {
-        if (gece) NightStars()
+        if (weather?.isDay == 0) NightStars()
         content()
+    }
+}
+
+private fun backgroundColors(weather: CurrentWeather?): List<Color> {
+    if (weather == null) return WeatherGradients.Default
+
+    val condition = WeatherCondition.fromCode(weather.weatherCode)
+    val night = weather.isDay == 0
+    val cloudyNight = condition == WeatherCondition.PARTLY_CLOUDY || condition.isOvercast
+
+    return when {
+        night && condition.isSnowy -> WeatherGradients.NightSnow
+        night && condition.isRainy -> WeatherGradients.NightRain
+        night && cloudyNight -> WeatherGradients.NightCloudy
+        night -> WeatherGradients.Night
+        condition.isSnowy -> WeatherGradients.Snow
+        condition.isRainy -> WeatherGradients.Rain
+        condition.isOvercast -> WeatherGradients.Overcast
+        condition == WeatherCondition.PARTLY_CLOUDY -> WeatherGradients.PartlyCloudy
+        else -> WeatherGradients.Clear
     }
 }
 
@@ -84,7 +86,7 @@ private fun NightStars() {
         stars.forEachIndexed { index, star ->
             val twinkleAlpha = if (index % 4 == 0) twinkle else 0.56f
             drawCircle(
-                color = if (index % 6 == 0) Color(0xFFFFE5A3) else Color.White,
+                color = if (index % 6 == 0) NightStarWarm else Color.White,
                 radius = star.radiusDp.dp.toPx(),
                 center = Offset(size.width * star.x, size.height * star.y),
                 alpha = twinkleAlpha

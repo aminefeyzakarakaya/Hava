@@ -18,7 +18,7 @@ private val DarkColorScheme = darkColorScheme(
     surface = HavaNight,
     onSurface = HavaTextLight,
     surfaceVariant = HavaNightCard,
-    onSurfaceVariant = Color(0xFFD8E4F5)
+    onSurfaceVariant = HavaMutedNight
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -27,12 +27,12 @@ private val LightColorScheme = lightColorScheme(
     secondary = HavaCoral,
     onSecondary = HavaNavy,
     tertiary = HavaMint,
-    background = Color(0xFFF3F8FF),
+    background = HavaBackgroundLight,
     onBackground = HavaNavy,
-    surface = Color(0xFFFFFEFC),
+    surface = HavaSurfaceLight,
     onSurface = HavaNavy,
     surfaceVariant = HavaSky,
-    onSurfaceVariant = Color(0xFF536A86)
+    onSurfaceVariant = HavaMutedLight
 )
 
 @Composable

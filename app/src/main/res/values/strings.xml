@@ -1,3 +1,57 @@
 <resources>
-    <string name="app_name">Hava Durumu</string>
+    <string name="app_name">Hava</string>
+    <string name="app_tagline">Hava durumun hep yanında</string>
+
+    <!-- Ana ekran -->
+    <string name="hero_city_chip">⌖ %1$s  ⌄</string>
+    <string name="hero_locating">⌖ Konum aranıyor…</string>
+    <string name="hero_pick_city">⌖ Şehir seç  ⌄</string>
+    <string name="hero_loading">Hava durumu yükleniyor…</string>
+    <string name="hero_empty_hint">Şehrini seç, hava durumunu birlikte görelim.</string>
+    <string name="hero_feels_like">Hissedilen %1$d°</string>
+
+    <!-- Tahminler -->
+    <string name="forecast_hourly">Saatlik tahmin</string>
+    <string name="forecast_daily">7 günlük tahmin</string>
+    <string name="now">Şimdi</string>
+    <string name="today">Bugün</string>
+
+    <!-- Bugünün detayları -->
+    <string name="details_title">Bugünün detayları</string>
+    <string name="detail_humidity">Nem</string>
+    <string name="detail_wind">Rüzgâr</string>
+    <string name="detail_feels_like">Hissedilen</string>
+    <string name="detail_conditions">Koşullar</string>
+    <string name="humidity_value">%%%1$d</string>
+    <string name="wind_value">%1$d km/sa</string>
+
+    <!-- Şarkı önerisi -->
+    <string name="music_card_title">BUGÜNÜN ŞARKI ÖNERİSİ</string>
+
+    <!-- Şehir seçme paneli -->
+    <string name="city_picker_title">Şehir seç</string>
+    <string name="city_picker_subtitle">Hava durumunu görmek istediğin ili seç.</string>
+    <string name="city_search_label">İl ara</string>
+    <string name="use_my_location">⌖ Konumumu kullan</string>
+    <string name="no_results">Sonuç bulunamadı</string>
+    <string name="city_selected">Seçili</string>
+    <string name="my_location">Konumum</string>
+
+    <!-- Hava durumu açıklamaları -->
+    <string name="weather_clear">Açık</string>
+    <string name="weather_mostly_clear">Az bulutlu</string>
+    <string name="weather_partly_cloudy">Parçalı bulutlu</string>
+    <string name="weather_cloudy">Bulutlu</string>
+    <string name="weather_fog">Sisli</string>
+    <string name="weather_drizzle">Çisenti</string>
+    <string name="weather_rain">Yağmurlu</string>
+    <string name="weather_snow">Karlı</string>
+    <string name="weather_thunderstorm">Gök gürültülü</string>
+    <string name="weather_unknown">Hava durumu</string>
+
+    <!-- Hatalar -->
+    <string name="error_location_denied">Konum izni verilmedi. Şehir seçerek devam edebilirsin.</string>
+    <string name="error_location_not_found">Konum bulunamadı. Şehir seçerek devam edebilirsin.</string>
+    <string name="error_location_failed">Konum alınamadı. Şehir seçerek devam edebilirsin.</string>
+    <string name="error_weather_failed">Hava durumu alınamadı.</string>
 </resources>

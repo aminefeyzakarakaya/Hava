@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Theme.Hava.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#79BDF0</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/teknocan_icon</item>
+        <item name="postSplashScreenTheme">@style/Theme.Hava</item>
+    </style>
 
     <style name="Theme.Hava" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

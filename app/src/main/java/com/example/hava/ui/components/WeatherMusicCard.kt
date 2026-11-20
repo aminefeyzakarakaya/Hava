@@ -1,4 +1,4 @@
-package com.example.hava.ui
+package com.example.hava.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hava.domain.WeatherCondition
+import com.example.hava.ui.theme.HavaNavy
+import com.example.hava.ui.theme.HavaNightCard
+import com.example.hava.ui.theme.HavaTextLight
+import com.example.hava.ui.theme.MusicCardColors
+import androidx.compose.ui.res.stringResource
+import com.example.hava.R
 
 data class WeatherSong(
     val title: String,
@@ -27,30 +34,29 @@ data class WeatherSong(
 )
 
 /** Returns one named song suggestion based on the current weather and time of day. */
-fun musicSuggestionForWeather(weatherCode: Int, isDay: Boolean): WeatherSong = when {
-    weatherCode in 51..67 || weatherCode in 80..82 || weatherCode in 95..99 ->
-        WeatherSong("Yağmur Yağar", "Mutlak Sıfır")
+fun musicSuggestionForWeather(condition: WeatherCondition, isDay: Boolean): WeatherSong =
+    when (condition) {
+        WeatherCondition.DRIZZLE, WeatherCondition.RAIN, WeatherCondition.THUNDERSTORM ->
+            WeatherSong("Yağmur Yağar", "Mutlak Sıfır")
 
-    weatherCode in 71..77 || weatherCode == 85 || weatherCode == 86 ->
-        WeatherSong("Snowman", "Sia")
+        WeatherCondition.SNOW -> WeatherSong("Snowman", "Sia")
 
-    weatherCode == 0 || weatherCode == 1 -> if (isDay) {
-        WeatherSong("Walking on Sunshine", "Katrina & The Waves")
-    } else {
-        WeatherSong("A Sky Full of Stars", "Coldplay")
+        WeatherCondition.CLEAR, WeatherCondition.MOSTLY_CLEAR -> if (isDay) {
+            WeatherSong("Walking on Sunshine", "Katrina & The Waves")
+        } else {
+            WeatherSong("A Sky Full of Stars", "Coldplay")
+        }
+
+        WeatherCondition.PARTLY_CLOUDY -> if (isDay) {
+            WeatherSong("Mr. Blue Sky", "Electric Light Orchestra")
+        } else {
+            WeatherSong("A Sky Full of Stars", "Coldplay")
+        }
+
+        WeatherCondition.CLOUDY, WeatherCondition.FOG -> WeatherSong("Clouds", "IYAMAH")
+
+        WeatherCondition.UNKNOWN -> WeatherSong("Mr. Blue Sky", "Electric Light Orchestra")
     }
-
-    weatherCode == 2 -> if (isDay) {
-        WeatherSong("Mr. Blue Sky", "Electric Light Orchestra")
-    } else {
-        WeatherSong("A Sky Full of Stars", "Coldplay")
-    }
-
-    weatherCode == 3 || weatherCode == 45 || weatherCode == 48 ->
-        WeatherSong("Clouds", "IYAMAH")
-
-    else -> WeatherSong("Mr. Blue Sky", "Electric Light Orchestra")
-}
 
 @Composable
 fun WeatherMusicCard(
@@ -58,9 +64,9 @@ fun WeatherMusicCard(
     isNight: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val cardColor = if (isNight) Color(0xFF193655) else Color(0xFFDCE9F8)
-    val textColor = if (isNight) Color(0xFFF8FAFF) else Color(0xFF19365B)
-    val accent = if (isNight) Color(0xFFC6B9FF) else Color(0xFFFFC4B2)
+    val cardColor = if (isNight) HavaNightCard else MusicCardColors.CardDay
+    val textColor = if (isNight) HavaTextLight else HavaNavy
+    val accent = if (isNight) MusicCardColors.AccentNight else MusicCardColors.AccentDay
 
     Surface(
         modifier = modifier.fillMaxWidth(),
@@ -91,7 +97,7 @@ fun WeatherMusicCard(
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    text = "BUGÜNÜN ŞARKI ÖNERİSİ",
+                    text = stringResource(R.string.music_card_title),
                     color = textColor.copy(alpha = 0.68f),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
